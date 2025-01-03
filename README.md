@@ -1,20 +1,21 @@
-Savoré - A Meal Discovery App
-Savoré is a beautifully crafted Flutter application that helps you explore and discover a wide variety of meals based on your dietary preferences. Whether you're gluten-free, vegetarian, or vegan, Savoré provides an easy way to filter meals and find delicious recipes that match your needs.
+# Savoré - A Meal Discovery App
 
-With a user-friendly interface and clean design, the app lets you:
-Browse meal categories and find new recipes based on your preferences.
-Apply dietary filters like gluten-free, lactose-free, vegetarian, and vegan to tailor your meal discovery experience.
-Save your favorite meals and access them easily anytime.
-Explore detailed meal information with ingredients, cooking steps, and images.
-Toggle your favorites easily while enjoying the meals you love!
+**Savoré** is a beautifully crafted Flutter app designed to help you explore and discover a variety of meals based on your dietary preferences. Whether you're gluten-free, vegetarian, or vegan, Savoré offers an easy way to filter meals and find recipes that fit your needs.
 
-Features
-Custom Filters: Filter meals based on dietary needs like gluten-free, lactose-free, vegetarian, and vegan.
-Favorites: Save and view your favorite meals.
-Meal Details: View complete meal details including ingredients and steps.
-Responsive UI: Designed to work smoothly on all screen sizes.
+With its clean design and user-friendly interface, Savoré allows you to:
+- Browse meal categories and discover new recipes.
+- Apply filters like gluten-free, lactose-free, vegetarian, and vegan.
+- Save your favorite meals and access them anytime.
+- View detailed meal information with ingredients, steps, and images.
+- Toggle favorites effortlessly as you enjoy meals you love.
 
-Technologies Used
-Flutter: Built using the powerful Flutter framework for a fast, natively compiled experience.
-Dart: Using Dart language for building robust and responsive apps.
-State Management: Simple state management with setState and other Flutter tools.
+## Features:
+- **Custom Filters**: Filter meals based on dietary needs like gluten-free, lactose-free, vegetarian, and vegan.
+- **Favorites**: Save and view your favorite meals.
+- **Meal Details**: Access complete details, including ingredients and cooking steps.
+- **Responsive UI**: Smooth user experience across all screen sizes.
+
+## Technologies Used:
+- **Flutter**: Built with Flutter for a fast, natively compiled experience.
+- **Dart**: Developed using Dart for robust, responsive apps.
+- **State Management**: Simple state management using Flutter's setState and tools.

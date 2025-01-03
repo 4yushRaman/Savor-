@@ -8,26 +8,37 @@ import 'package:meals/models/category.dart';
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({
     super.key,
-    required this.onToggleFavorite,
     required this.availableMeals,
   });
 
-  final void Function(Meal meal) onToggleFavorite;
   final List<Meal> availableMeals;
 
-  void _selectCategory(BuildContext context, Category category) {
-    final filteredMeals = availableMeals
+  List<Meal> _filterMealsByCategory(Category category) {
+    return availableMeals
         .where((meal) => meal.categories.contains(category.id))
         .toList();
+  }
+
+  void _selectCategory(BuildContext context, Category category) {
+    final filteredMeals = _filterMealsByCategory(category);
 
     if (filteredMeals.isEmpty) {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text('No meals found'),
-          content: Text('There are no meals available for this category.'),
+          title: Text(
+            'No meals found',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          content: Text(
+            'There are no meals available for this category.',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           actions: [
             TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.primary,
+              ),
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
@@ -43,7 +54,6 @@ class CategoriesScreen extends StatelessWidget {
           builder: (ctx) => MealsScreen(
             title: category.title,
             meals: filteredMeals,
-            onToggleFavorite: onToggleFavorite,
           ),
         ),
       );
@@ -52,24 +62,29 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView(
-      padding: const EdgeInsets.all(24),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200, // Adjusted for responsive layout
-        childAspectRatio: 1.5,
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 20,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Categories'),
       ),
-      children: [
-        for (final category in availableCategories)
-          CategoryGridItem(
-            key: ValueKey(category.id), // Key for better performance
-            category: category,
-            onSelectCategory: () {
-              _selectCategory(context, category);
-            },
-          )
-      ],
+      body: GridView(
+        padding: const EdgeInsets.all(24),
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200,
+          childAspectRatio: 1.5,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
+        ),
+        children: [
+          for (final category in availableCategories)
+            CategoryGridItem(
+              key: ValueKey(category.id),
+              category: category,
+              onSelectCategory: () {
+                _selectCategory(context, category);
+              },
+            ),
+        ],
+      ),
     );
   }
 }

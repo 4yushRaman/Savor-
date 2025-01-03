@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meals/providers/filters_provider.dart';
 
-enum Filter {
-  glutenFree,
-  lactoseFree,
-  vegetarian,
-  vegan,
-}
-
-class FiltersScreen extends StatefulWidget {
+class FiltersScreen extends ConsumerStatefulWidget {
   const FiltersScreen({
     super.key,
     required this.currentFilters,
@@ -16,23 +11,58 @@ class FiltersScreen extends StatefulWidget {
   final Map<Filter, bool> currentFilters;
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<FiltersScreen> createState() {
     return _FiltersScreenState();
   }
 }
 
-class _FiltersScreenState extends State<FiltersScreen> {
+class _FiltersScreenState extends ConsumerState<FiltersScreen> {
   late Map<Filter, bool> _filters;
 
   @override
   void initState() {
     super.initState();
-    _filters = {...widget.currentFilters}; // Copy the current filter values
+    _filters = {...widget.currentFilters};
   }
 
-  // Method to save the filter settings
   void _saveFilters() {
-    Navigator.of(context).pop(_filters); // Return the selected filters
+    Navigator.of(context).pop(_filters);
+  }
+
+  void _resetFilters() {
+    setState(() {
+      _filters = {
+        Filter.glutenFree: false,
+        Filter.lactoseFree: false,
+        Filter.vegetarian: false,
+        Filter.vegan: false,
+      };
+    });
+  }
+
+  Future<bool> _onWillPop() async {
+    if (_filters != widget.currentFilters) {
+      final shouldPop = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Discard changes?'),
+          content: const Text(
+              'You have unsaved changes. Are you sure you want to discard them?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: const Text('Discard'),
+            ),
+          ],
+        ),
+      );
+      return shouldPop ?? false;
+    }
+    return true;
   }
 
   @override
@@ -41,56 +71,51 @@ class _FiltersScreenState extends State<FiltersScreen> {
       appBar: AppBar(
         title: const Text('Your Filters'),
       ),
-      // drawer: MainDrawer(
-      //   onSelectScreen: (identifier) {
-      //     Navigator.of(context).pop();
-      //     if (identifier == 'meals') {
-      //       Navigator.of(context).pushReplacement(
-      //         MaterialPageRoute(
-      //           builder: (ctx) => TabsScreen(),
-      //         ),
-      //       );
-      //     }
-      //   },
-      // ),
       body: WillPopScope(
-        onWillPop: () async {
-          // Return the current filter settings when the user navigates back
-          Navigator.of(context).pop(_filters);
-          return false;
-        },
+        onWillPop: _onWillPop,
         child: Column(
           children: [
             ...Filter.values.map((filter) {
-              return SwitchListTile(
+              return FilterSwitch(
+                filter: filter,
                 value: _filters[filter] ?? false,
                 onChanged: (newValue) {
                   setState(() {
                     _filters[filter] = newValue;
                   });
                 },
-                title: Text(
-                  _getFilterTitle(filter),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                ),
-                subtitle: Text(
-                  _getFilterSubtitle(filter),
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                ),
-                activeColor: Theme.of(context).colorScheme.tertiary,
-                contentPadding: const EdgeInsets.only(left: 34, right: 22),
               );
             }).toList(),
-            const Spacer(), // Add a spacer to push the button to the bottom
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: ElevatedButton(
-                onPressed: _saveFilters,
-                child: const Text('Save Filters'),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.errorContainer,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onErrorContainer,
+                      ),
+                      onPressed: _resetFilters,
+                      child: const Text('Reset Filters'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      onPressed: _saveFilters,
+                      child: const Text('Save Filters'),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -98,6 +123,19 @@ class _FiltersScreenState extends State<FiltersScreen> {
       ),
     );
   }
+}
+
+class FilterSwitch extends StatelessWidget {
+  const FilterSwitch({
+    super.key,
+    required this.filter,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final Filter filter;
+  final bool value;
+  final void Function(bool) onChanged;
 
   String _getFilterTitle(Filter filter) {
     switch (filter) {
@@ -127,5 +165,27 @@ class _FiltersScreenState extends State<FiltersScreen> {
       default:
         return '';
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SwitchListTile(
+      value: value,
+      onChanged: onChanged,
+      title: Text(
+        _getFilterTitle(filter),
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+      ),
+      subtitle: Text(
+        _getFilterSubtitle(filter),
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+      ),
+      activeColor: Theme.of(context).colorScheme.tertiary,
+      contentPadding: const EdgeInsets.only(left: 34, right: 22),
+    );
   }
 }
