@@ -1,16 +1,20 @@
-# meals
+Savoré - A Meal Discovery App
+Savoré is a beautifully crafted Flutter application that helps you explore and discover a wide variety of meals based on your dietary preferences. Whether you're gluten-free, vegetarian, or vegan, Savoré provides an easy way to filter meals and find delicious recipes that match your needs.
 
-A new Flutter project.
+With a user-friendly interface and clean design, the app lets you:
+Browse meal categories and find new recipes based on your preferences.
+Apply dietary filters like gluten-free, lactose-free, vegetarian, and vegan to tailor your meal discovery experience.
+Save your favorite meals and access them easily anytime.
+Explore detailed meal information with ingredients, cooking steps, and images.
+Toggle your favorites easily while enjoying the meals you love!
 
-## Getting Started
+Features
+Custom Filters: Filter meals based on dietary needs like gluten-free, lactose-free, vegetarian, and vegan.
+Favorites: Save and view your favorite meals.
+Meal Details: View complete meal details including ingredients and steps.
+Responsive UI: Designed to work smoothly on all screen sizes.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Technologies Used
+Flutter: Built using the powerful Flutter framework for a fast, natively compiled experience.
+Dart: Using Dart language for building robust and responsive apps.
+State Management: Simple state management with setState and other Flutter tools.
